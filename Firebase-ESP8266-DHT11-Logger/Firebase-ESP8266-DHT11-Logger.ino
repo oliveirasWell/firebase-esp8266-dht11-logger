@@ -8,6 +8,7 @@
 #define DHTTYPE DHT11
 #define DELAY_TIME_TO_SEND 10000
 #define TABLE_NAME "leitura"
+#define CLIENT_EMAIL "user@mail.com"
 
 DHT dht(DHTPIN, DHTTYPE);
 
@@ -36,14 +37,14 @@ void loop() {
     delay(DELAY_TIME_TO_SEND);
     root["temperatura"] = dht.readTemperature();
     root["umidade"] = dht.readHumidity();
-    root["cliente"] = "well.oliveira.snt@gmail.com";
+    root["cliente"] = CLIENT_EMAIL;
     root["data"] = getDateTime();
     delay(1000);
 
     Firebase.push(TABLE_NAME, root);
 
     if (Firebase.failed()) {
-        Serial.print( TABLE_NAME +" failed to send:");
+        Serial.print( String(TABLE_NAME) +" failed to send:");
         Serial.println(Firebase.error());
         return;
     }
