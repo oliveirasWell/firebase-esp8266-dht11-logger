@@ -8,6 +8,9 @@ A Realtime logger of temperature and humidity build with ESP8266 and Firebase fr
 * ESP8266 or ESP3266
 * DHT11 Temperature and Humidity Sensor
 
+### Configuration
+Set your network name, password and Firebase auth credentials at authUtils.h
+
 ### Libs
 * [Firebase Arduino](https://github.com/firebase/firebase-arduino)
 * [DHT](https://github.com/adafruit/DHT-sensor-library)
