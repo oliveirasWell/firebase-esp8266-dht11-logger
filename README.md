@@ -21,5 +21,5 @@ Set your network name, password and Firebase auth credentials at authUtils.h
 * [Firebase] (https://firebase.google.com/)
 
 ## Front-end (TODO)
-* [Meteor](https://www.meteor.com/)
 * [React](https://facebook.github.io/react/)
+* [Material-UI](https://facebook.github.io/react/)
