@@ -1,8 +1,8 @@
 import * as firebase from "firebase";
 import ReactFireMixin from "reactfire";
 import React from 'react';
-import {AppBar, Tabs, Tab} from 'material-ui'
-import config from './auth.js'
+import {AppBar} from 'material-ui'
+import config from '../utils/auth.js'
 import ListLeitura from './ListLeitura.js';
 
 const Logger = React.createClass({
@@ -22,13 +22,7 @@ const Logger = React.createClass({
                 <AppBar
                     title="Leituras"
                     iconClassNameRight="muidocs-icon-navigation-expand-more"
-                >
-                    <Tabs>
-                        <Tab label="Leituras">
-                        </Tab>
-                    </Tabs>
-
-                </AppBar>
+                />
                 <ListLeitura data={this.state.data}/>
             </div>
         );
