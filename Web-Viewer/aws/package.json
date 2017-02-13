@@ -1,0 +1,8 @@
+{
+  "name": "esp-logger",
+  "version": "0.0.1",
+  "scripts": {
+    "prestart": "cd programs/server && npm install",
+    "start": "node main.js"
+  }
+}
