@@ -3,7 +3,6 @@ import "../css/App.css";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import {AppBar, Drawer, MenuItem} from "material-ui";
 import theme from "../utils/theme";
-import ListLeitura from "./ListLeitura";
 
 const App = React.createClass({
     getInitialState() {
@@ -23,7 +22,7 @@ const App = React.createClass({
                         iconClassNameRight="muidocs-icon-navigation-expand-more"
                         onLeftIconButtonTouchTap={this.handleToggle}
                     />
-                    <ListLeitura data={this.state.data}/>
+                    {this.props.children}
                     <Drawer open={this.state.open}>
                         <AppBar
                             title="Leituras"
