@@ -11,7 +11,7 @@
 WiFiUDP udp;
 IPAddress timeServer(132, 163, 4, 101);
 
-const int timeZone = -3;
+const int timeZone = -4;
 
 /*-------- NTP code ----------*/
 byte packetBuffer[NTP_PACKET_SIZE]; //buffer to hold incoming & outgoing packets
@@ -61,11 +61,19 @@ time_t getNtpTime() {
     return 0; // return 0 if unable to get the time
 }
 
+String getFormatedTimeOf(String time) {
+    return (time.toInt() < 10 ? String("0") : "") + time;
+}
+
 String getDateTime() {
     if (timeStatus() != timeNotSet) {
-        String returnString = String(hour()) + ":" + String(minute()) + ":" + String(second()) + " "
-                              + String(day()) + "/" + String(month()) + "/" + String(year());
-        Serial.println(returnString);
+        String hora = getFormatedTimeOf(String(hour()));
+        String minuto = getFormatedTimeOf(String(minute()));
+        String segundo = getFormatedTimeOf(String(second()));
+        String dia = getFormatedTimeOf(String(day()));
+        String mes = getFormatedTimeOf(String(month()));
+        String ano = getFormatedTimeOf(String(year()));
+        String returnString = hora + ":" + minuto + ":" + segundo + " " + dia + "/" + mes + "/" + ano;
         return returnString;
     }
 }
