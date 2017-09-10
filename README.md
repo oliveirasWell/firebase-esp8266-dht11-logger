@@ -20,7 +20,7 @@ Set your network name, password and Firebase auth credentials at authUtils.h
 
 
 ## Back-end
-* [Firebase] (https://firebase.google.com/)
+* [Firebase](https://firebase.google.com/)
 
 ## Front-end
 * [React](https://facebook.github.io/react/)
