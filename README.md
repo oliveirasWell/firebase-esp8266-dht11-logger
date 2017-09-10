@@ -16,9 +16,11 @@ Set your network name, password and Firebase auth credentials at authUtils.h
 * [DHT](https://github.com/adafruit/DHT-sensor-library)
 * [ESP8266 Arduino Core](https://github.com/esp8266/Arduino)
 * [Time](https://github.com/PaulStoffregen/Time)
+* [Adafruit Unified Sensor Library](https://forum.arduino.cc/index.php?topic=471001.0)
+
 
 ## Back-end
-* [Firebase] (https://firebase.google.com/)
+* [Firebase](https://firebase.google.com/)
 
 ## Front-end
 * [React](https://facebook.github.io/react/)
