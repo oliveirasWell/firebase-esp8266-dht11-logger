@@ -1,6 +1,6 @@
 # ESP8266 Temp logger with Firebase
 
-A Realtime logger of temperature and humidity build with ESP8266 and Firebase front-end.
+A Realtime logger of temperature and humidity build with ESP8266 and Firebase back-end.
 
 ## ESP8266 - Logger
 
