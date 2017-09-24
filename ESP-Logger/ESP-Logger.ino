@@ -1,18 +1,18 @@
-#include <ESP8266WiFi.h>
+#include "ntpUtils.h"
+#include "authUtils.h"
+
 #include <FirebaseArduino.h>
 #include <DHT.h>
-#include "authUtils.h"
-#include "ntpUtils.h"
 
 #define DHTPIN D2
 #define DHTTYPE DHT11
-#define DELAY_TIME_TO_SEND 1800000 // 30 min
+#define DELAY_TIME_TO_SEND  900000 // 15 min
 #define TABLE_NAME "leitura"
 #define CLIENT_EMAIL "user@mail.com"
 
 DHT dht(DHTPIN, DHTTYPE);
 
-StaticJsonBuffer<200> jsonBuffer;
+StaticJsonBuffer<1000> jsonBuffer;
 JsonObject &root = jsonBuffer.createObject();
 
 void inline readDataToSend();
@@ -34,14 +34,18 @@ void setup() {
     Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
     udp.begin(UDP_NTS_PORT);
     setSyncProvider(getNtpTime);
+    pinMode(LED_BUILTIN, OUTPUT);
+    digitalWrite(LED_BUILTIN, HIGH);
 }
+
+String errorToPrint = String(TABLE_NAME) + " failed to send:";
 
 void loop() {
     readDataToSend();
     Firebase.push(TABLE_NAME, root);
 
     if (Firebase.failed()) {
-        Serial.print(String(TABLE_NAME) + " failed to send:");
+        Serial.print(errorToPrint);
         Serial.println(Firebase.error());
         return;
     }
@@ -57,12 +61,14 @@ void inline setLeitura(String temperatura, String umidade, String cliente, Strin
 }
 
 void inline readDataToSend() {
+    digitalWrite(LED_BUILTIN, LOW);
     String temperatura = String(dht.readTemperature());
     String umid = String(dht.readHumidity());
     String cliente = CLIENT_EMAIL;
     String data = String(getDateTime());
-    delay(1000);
+    delay(5000);
 
     setLeitura(temperatura, umid, cliente, data);
     Serial.println("temp=" + temperatura + " umid=" + umid + " clnt=" + cliente + " dateTime=" + data);
+    digitalWrite(LED_BUILTIN, HIGH);
 }
