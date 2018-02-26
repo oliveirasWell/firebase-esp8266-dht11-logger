@@ -44,22 +44,23 @@ void setup() {
 
 String errorToPrint = String(TABLE_NAME) + " failed to send:";
 
-int count = 1500;
+int count = 15000;
 
 void loop() {
 
-    WiFi.hostByName(ntpServerName, timeServer);
-    setSyncProvider(getNtpTime);
-    setSyncInterval(300);
-  
+    Serial.print(count);
+
     count++;
     if(count > 1500) {
+        WiFi.hostByName(ntpServerName, timeServer);
+        setSyncProvider(getNtpTime);
+        setSyncInterval(300);
         readDataToSend();
-        delay(10);
+        delay(100);
         count = 0;  
         Firebase.push(TABLE_NAME, root);
     } else {
-        delay(10);
+        delay(100);
     }
 
     if (Firebase.failed()) {
