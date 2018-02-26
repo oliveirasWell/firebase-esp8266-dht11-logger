@@ -78,4 +78,10 @@ String getDateTime() {
         return returnString;
     }
 }
+
+String getEpoch() {
+    time_t t = now();
+    return String(t);
+}
+
 #endif /* NPT_UTILS */

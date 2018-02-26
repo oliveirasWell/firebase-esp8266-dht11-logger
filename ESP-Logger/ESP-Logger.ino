@@ -88,7 +88,7 @@ void inline readDataToSend() {
     String temperatura = String(dht.readTemperature());
     String umid = String(dht.readHumidity());
     String cliente = CLIENT_EMAIL;
-    String data = String(getDateTime());
+    String data = getEpoch();
     delay(1000);
 
     setLeitura(temperatura, umid, cliente, data);
