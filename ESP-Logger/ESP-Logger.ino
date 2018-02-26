@@ -44,7 +44,7 @@ void setup() {
 
 String errorToPrint = String(TABLE_NAME) + " failed to send:";
 
-int count = 15000;
+int count = 1500;
 
 void loop() {
 
@@ -52,15 +52,14 @@ void loop() {
     setSyncProvider(getNtpTime);
     setSyncInterval(300);
   
-    readDataToSend();
-
     count++;
-    if(count > 15000) {
-        delay(100);
-        count = 0;
+    if(count > 1500) {
+        readDataToSend();
+        delay(10);
+        count = 0;  
         Firebase.push(TABLE_NAME, root);
     } else {
-        delay(100);
+        delay(10);
     }
 
     if (Firebase.failed()) {
