@@ -9,7 +9,8 @@
 #define NTP_PACKET_SIZE 48
 
 WiFiUDP udp;
-IPAddress timeServer(132, 163, 4, 101);
+const char* ntpServerName = "time.nist.gov";
+IPAddress timeServer;
 
 const int timeZone = -4;
 

@@ -36,7 +36,6 @@ void setup() {
     Serial.println(WiFi.localIP());
     Firebase.begin(FIREBASE_HOST, FIREBASE_AUTH);
     udp.begin(UDP_NTS_PORT);
-    setSyncProvider(getNtpTime);
     pinMode(LED_BUILTIN, OUTPUT);
     pinMode(FANPIN, OUTPUT);
     pinMode(LIGHTPIN, OUTPUT);
@@ -48,13 +47,20 @@ String errorToPrint = String(TABLE_NAME) + " failed to send:";
 int count = 15000;
 
 void loop() {
+
+    WiFi.hostByName(ntpServerName, timeServer);
+    setSyncProvider(getNtpTime);
+    setSyncInterval(300);
+  
     readDataToSend();
 
     count++;
-    if(count > 150) {
+    if(count > 15000) {
         delay(100);
         count = 0;
         Firebase.push(TABLE_NAME, root);
+    } else {
+        delay(100);
     }
 
     if (Firebase.failed()) {
@@ -82,7 +88,7 @@ void inline readDataToSend() {
     String temperatura = String(dht.readTemperature());
     String umid = String(dht.readHumidity());
     String cliente = CLIENT_EMAIL;
-    String data = "";//String(getDateTime());
+    String data = String(getDateTime());
     delay(1000);
 
     setLeitura(temperatura, umid, cliente, data);
