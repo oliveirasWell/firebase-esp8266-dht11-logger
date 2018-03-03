@@ -9,7 +9,7 @@
 #define LIGHTPIN D5
 #define SENSORPIN D8
 #define DHTTYPE DHT11
-#define DELAY_TIME_TO_SEND  5000 // 15 min
+#define DELAY_TIME_TO_SEND  360 // 5 min
 #define TABLE_LEITURA "leitura"
 #define TABLE_MOTION "motion"
 #define CLIENT_EMAIL "well.oliveira.snt@gmail.com"
@@ -52,7 +52,7 @@ inline String getErrorString(String table) {
     return String(TABLE_LEITURA) + " failed to send:";
 }
 
-void inline updateMontionSensor() {
+void inline readMotionSensorAndSendToFirebase() {
     if (digitalRead(SENSORPIN) != motionSensorRead) {
         motionSensorRead = digitalRead(SENSORPIN);
         motion["state"] = String(motionSensorRead);
@@ -69,11 +69,12 @@ void inline updateMontionSensor() {
     }
 }
 
-void inline setLeitura(String temperatura, String umidade, String cliente, String data) {
+void inline setLeitura(String temperatura, String umidade, String cliente, String data, String motion) {
     leitura["temperatura"] = temperatura;
     leitura["umidade"] = umidade;
     leitura["cliente"] = cliente;
     leitura["data"] = data;
+    leitura["motion"] = motion;
 }
 
 void inline readDataToSend() {
@@ -81,15 +82,23 @@ void inline readDataToSend() {
     String umid = String(dht.readHumidity());
     String cliente = CLIENT_EMAIL;
     String data = getEpoch();
+    String motion = String(digitalRead(SENSORPIN));
     delay(1000);
-
-    setLeitura(temperatura, umid, cliente, data);
-    Serial.println("temp=" + temperatura + " umid=" + umid + " clnt=" + cliente + " dateTime=" + data);
+    setLeitura(temperatura, umid, cliente, data, motion);
+    Serial.println(
+            "temp=" + temperatura + " umid=" + umid + " clnt=" + cliente + " dateTime=" + data + " motion=" + motion);
 }
 
-void inline updateLeitura() {
-    if (count > 1500) {
-        readDataToSend();
+void inline readLeituraAndSendToFirebase() {
+    readDataToSend();
+
+    if (count > DELAY_TIME_TO_SEND) {
+
+        if (leitura["temperatura"] == "nan" || leitura["umidade"] == "nan" || leitura["data"] == "0" ||
+            leitura["data"] == "") {
+            return;
+        }
+
         count = 0;
         Firebase.push(TABLE_LEITURA, leitura);
     }
@@ -107,20 +116,25 @@ void inline updateLighAndFan() {
     digitalWrite(LED_BUILTIN, !Firebase.getBool(String(DEVICE_PATH) + "light"));
 }
 
-
-void loop() {
-
+//TODO verify wheter is this okay or not
+void inline updateNtp() {
     WiFi.hostByName(ntpServerName, timeServer);
     setSyncProvider(getNtpTime);
     setSyncInterval(300);
+}
 
-    updateMontionSensor();
-
-    updateLeitura();
-
-    updateLighAndFan();
-
-    count++;
+void inline updateCountAndPrint() {
     delay(100);
+    count++;
+    Serial.println("/-----Count-------");
     Serial.println(count);
+    Serial.println("------Count------/");
+}
+
+void loop() {
+    updateNtp();
+    readMotionSensorAndSendToFirebase();
+    readLeituraAndSendToFirebase();
+    updateLighAndFan();
+    updateCountAndPrint();
 }
