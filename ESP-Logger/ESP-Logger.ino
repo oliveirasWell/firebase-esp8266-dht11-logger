@@ -94,8 +94,7 @@ void inline readLeituraAndSendToFirebase() {
 
     if (count > DELAY_TIME_TO_SEND) {
 
-        if (leitura["temperatura"] == "nan" || leitura["umidade"] == "nan" || leitura["data"] == "0" ||
-            leitura["data"] == "") {
+        if (leitura["temperatura"] == "nan" || leitura["umidade"] == "nan" || getEpoch().toInt() <= 1000) {
             return;
         }
 
