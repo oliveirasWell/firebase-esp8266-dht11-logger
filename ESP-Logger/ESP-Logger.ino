@@ -179,4 +179,5 @@ void loop() {
     readLeituraAndSendToFirebase();
     updateLighAndFan();
     updateCountAndPrint();
+    updateCountErrosAndPrint();
 }
